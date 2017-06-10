@@ -14,7 +14,7 @@ import com.ucloud.ulive.UStreamingContext;
  */
 public class LiveApplication extends Application{
 
-  private static LiveApplication instance;
+  private static LiveApplication instance; // instance初始化的值为this
 
 
   @Override public void onCreate() {
