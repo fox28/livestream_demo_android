@@ -17,6 +17,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import cn.kkk.live.R;
+import cn.kkk.live.utils.L;
+import cn.kkk.live.utils.MD5;
+
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
@@ -24,6 +27,7 @@ import com.hyphenate.chat.EMClient;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends BaseActivity {
+  private static final String TAG = "LoginActivity";
 
 
   // UI references.
@@ -116,8 +120,10 @@ public class LoginActivity extends BaseActivity {
       // Show a progress spinner, and kick off a background task to
       // perform the user login attempt.
       showProgress(true);
-      EMClient.getInstance().login(email.toString(), password.toString(), new EMCallBack() {
+      L.e(TAG, "success|before, user01 = "+EMClient.getInstance().getCurrentUser());
+      EMClient.getInstance().login(email.toString(), MD5.getMessageDigest(password.toString()), new EMCallBack() {
         @Override public void onSuccess() {
+          L.e(TAG, "success|before, user02 = "+EMClient.getInstance().getCurrentUser());
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
