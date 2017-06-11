@@ -79,7 +79,7 @@ public class PreferenceManager {
 	 */
 	public synchronized static PreferenceManager getInstance() {
 		if (mPreferencemManager == null) {
-			throw new RuntimeException("please init first!");
+			throw new RuntimeException("please init first!");// 抛异常
 		}
 
 		return mPreferencemManager;

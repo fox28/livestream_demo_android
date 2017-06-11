@@ -7,6 +7,8 @@ import android.content.Intent;
 import com.hyphenate.easeui.domain.User;
 
 import cn.kkk.live.R;
+import cn.kkk.live.ui.activity.LoginActivity;
+import cn.kkk.live.ui.activity.RegisterActivity;
 
 /**
  * Created by apple on 2017/5/23.
@@ -36,5 +38,8 @@ public class MFGT {
     }
 
 
-
+    public static void gotoLogin(Activity activity) {
+        startActivity(activity, new Intent(activity, LoginActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
 }

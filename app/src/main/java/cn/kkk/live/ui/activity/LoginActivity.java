@@ -19,6 +19,7 @@ import android.widget.TextView;
 import cn.kkk.live.R;
 import cn.kkk.live.utils.L;
 import cn.kkk.live.utils.MD5;
+import cn.kkk.live.utils.PreferenceManager;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
@@ -77,6 +78,9 @@ public class LoginActivity extends BaseActivity {
       }
     });
 
+    if (PreferenceManager.getInstance().getCurrentUsername() != null) {
+      mEmailView.setText(PreferenceManager.getInstance().getCurrentUsername());
+    }
 
   }
 

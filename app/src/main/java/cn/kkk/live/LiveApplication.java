@@ -3,6 +3,8 @@ package cn.kkk.live;
 import android.app.Application;
 import android.content.Intent;
 import cn.kkk.live.ui.activity.MainActivity;
+import cn.kkk.live.utils.PreferenceManager;
+
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
@@ -42,6 +44,7 @@ public class LiveApplication extends Application{
 
     EaseUI.getInstance().init(this, null);
     EMClient.getInstance().setDebugMode(true);
+    PreferenceManager.init(this); // 初始化PreferenceManager 否则无法调用其中方法
 
     EMClient.getInstance().addConnectionListener(new EMConnectionListener() {
       @Override public void onConnected() {

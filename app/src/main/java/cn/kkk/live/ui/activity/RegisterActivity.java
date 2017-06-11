@@ -24,6 +24,8 @@ import cn.kkk.live.data.model.UserModel;
 import cn.kkk.live.utils.CommonUtils;
 import cn.kkk.live.utils.L;
 import cn.kkk.live.utils.MD5;
+import cn.kkk.live.utils.MFGT;
+import cn.kkk.live.utils.PreferenceManager;
 import cn.kkk.live.utils.Result;
 import cn.kkk.live.utils.ResultUtils;
 
@@ -171,8 +173,8 @@ public class RegisterActivity extends BaseActivity {
                         public void run() {
                             pd.dismiss();
                             showToast("注册成功");
-                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                            finish();
+                            PreferenceManager.getInstance().setCurrentUserName(username);
+                            MFGT.gotoLogin(RegisterActivity.this);
                         }
                     });
                 } catch (final HyphenateException e) {
