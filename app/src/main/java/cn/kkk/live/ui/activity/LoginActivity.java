@@ -186,5 +186,12 @@ public class LoginActivity extends BaseActivity {
     }
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+    if (LiveHelper.getInstance().getCurrentUsernName()!=null) {
+      mEmailView.setText(LiveHelper.getInstance().getCurrentUsernName());
+    }
+  }
 }
 

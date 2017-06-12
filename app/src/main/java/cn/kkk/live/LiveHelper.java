@@ -45,9 +45,6 @@ public class LiveHelper {
 
     private LiveModel mLiveModel = null;
 
-    public boolean isVoiceCalling;
-    public boolean isVideoCalling;
-
     private String username;
 
     private Context appContext;
