@@ -16,6 +16,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import cn.kkk.live.LiveHelper;
 import cn.kkk.live.R;
 import cn.kkk.live.utils.L;
 import cn.kkk.live.utils.MD5;
@@ -128,6 +130,8 @@ public class LoginActivity extends BaseActivity {
       EMClient.getInstance().login(email.toString(), MD5.getMessageDigest(password.toString()), new EMCallBack() {
         @Override public void onSuccess() {
           L.e(TAG, "success|before, user02 = "+EMClient.getInstance().getCurrentUser());
+          LiveHelper.getInstance().getUserProfileManager().asyncGetCurrentAppUserInfo(); // 异步获取用户信息，并且将昵称头像保存到内存和SharePreference
+          PreferenceManager.getInstance().setCurrentUserName(EMClient.getInstance().getCurrentUser()); // 将用户名保存到SharePreference中
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
