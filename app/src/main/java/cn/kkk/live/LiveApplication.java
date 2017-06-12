@@ -23,8 +23,7 @@ public class LiveApplication extends Application{
     super.onCreate();
     instance = this;
 
-
-    initChatSdk();
+    LiveHelper.getInstance().init(this);
 
     //UEasyStreaming.initStreaming("publish3-key");
 
@@ -35,32 +34,5 @@ public class LiveApplication extends Application{
     return instance;
   }
 
-  private void initChatSdk(){
-    //EMOptions options = new EMOptions();
-    //options.enableDNSConfig(false);
-    //options.setRestServer("103.241.230.122:31080");
-    //options.setIMServer("103.241.230.122");
-    //options.setImPort(31097);
-
-    EaseUI.getInstance().init(this, null);
-    EMClient.getInstance().setDebugMode(true);
-    PreferenceManager.init(this); // 初始化PreferenceManager 否则无法调用其中方法
-
-    EMClient.getInstance().addConnectionListener(new EMConnectionListener() {
-      @Override public void onConnected() {
-
-      }
-
-      @Override public void onDisconnected(int errorCode) {
-        if(errorCode == EMError.USER_LOGIN_ANOTHER_DEVICE)
-        {
-          Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-          intent.putExtra("conflict", true);
-          startActivity(intent);
-        }
-      }
-    });
-  }
 
 }
