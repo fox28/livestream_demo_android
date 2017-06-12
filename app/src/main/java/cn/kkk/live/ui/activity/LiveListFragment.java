@@ -93,7 +93,7 @@ public class LiveListFragment extends Fragment {
                 if(!isLoadMore){
                     cursor = null;
                 }
-                return LiveManager.getInstance().getLivingRoomList(pageSize, cursor);
+                return LiveManager.getInstance().getLivingRoomList(pageSize, cursor);// 发送具体的网络请求
             }
 
             @Override public void onSuccess(ResponseModule<List<LiveRoom>> listResponseModule) {
