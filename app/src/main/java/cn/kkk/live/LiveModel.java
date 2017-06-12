@@ -1,7 +1,8 @@
-package cn.kkk.live.utils;
+package cn.kkk.live;
 
 import android.content.Context;
 
+import cn.kkk.live.utils.PreferenceManager;
 
 
 public class LiveModel {
