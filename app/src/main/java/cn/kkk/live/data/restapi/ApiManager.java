@@ -2,7 +2,10 @@ package cn.kkk.live.data.restapi;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+
+import cn.kkk.live.I;
 import cn.kkk.live.LiveApplication;
+import cn.kkk.live.data.model.Gift;
 import cn.kkk.live.data.model.LiveRoom;
 import cn.kkk.live.data.restapi.model.LiveStatusModule;
 import cn.kkk.live.data.restapi.model.ResponseModule;
@@ -10,6 +13,10 @@ import cn.kkk.live.data.restapi.model.StatisticsType;
 import com.hyphenate.chat.EMClient;
 import java.io.IOException;
 import java.util.List;
+
+import cn.kkk.live.utils.L;
+import cn.kkk.live.utils.Result;
+import cn.kkk.live.utils.ResultUtils;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -19,18 +26,22 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import org.json.JSONException;
 import org.json.JSONObject;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by wei on 2017/2/14.
  */
 
 public class ApiManager {
+    private static final String TAG = "ApiManager";
+
     private String appkey;
     private ApiService apiService;
-
+    private LiveService mLiveService;
     private static ApiManager instance;
 
     private ApiManager(){
@@ -55,8 +66,15 @@ public class ApiManager {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient)
                 .build();
-
         apiService = retrofit.create(ApiService.class);
+
+        Retrofit liveRetrofit = new Retrofit.Builder()
+                .baseUrl(I.SERVER_ROOT)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .client(httpClient)
+                .build();
+        mLiveService = liveRetrofit.create(LiveService.class); // 实例化接口LiveService
+
 
     }
 
@@ -175,6 +193,33 @@ public class ApiManager {
     //    Call respCall = apiService.updateLiveRoom(liveRoom.getId(), liveRoom);
     //    handleResponseCall(respCall);
     //}
+
+    public void getAllGifts(){
+        Call<String> call = mLiveService.getAllGifts();
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                String s = response.body();
+                L.e(TAG, "getAllGifts, onResponse, s = "+s);
+                if (s!=null) {
+                    Result result = ResultUtils.getListResultFromJson(s, Gift.class);
+                    L.e(TAG, "getAllGifts, result = "+result);
+                    if (result != null && result.isRetMsg()) {
+                        List<Gift> gifts = (List<Gift>) result.getRetData();
+                        L.e(TAG, "getAllGifts, size() = "+gifts.size() );
+                        for (Gift gift:gifts) {
+                            L.e(TAG, "getAllGifts, onResponse, gift = "+gift);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+    }
 
     /**
      * 获取直播室直播状态

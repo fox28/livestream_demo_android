@@ -25,6 +25,8 @@ import cn.kkk.live.R;
 import cn.kkk.live.data.model.LiveRoom;
 import cn.kkk.live.data.restapi.model.ResponseModule;
 import cn.kkk.live.ui.GridMarginDecoration;
+import cn.kkk.live.utils.L;
+
 import com.hyphenate.exceptions.HyphenateException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,8 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class LiveListFragment extends Fragment {
+    private static final String TAG = "LiveListFragment";
+
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private ProgressBar loadmorePB;
@@ -83,11 +87,14 @@ public class LiveListFragment extends Fragment {
 
 
     private void showLiveList(final boolean isLoadMore){
+        L.e(TAG, "showLiveList, isLoadMore = "+isLoadMore);
         if(!isLoadMore)
             swipeRefreshLayout.setRefreshing(true);
         else
             loadmorePB.setVisibility(View.VISIBLE);
         isLoading = true;
+        ApiManager.getInstance().getAllGifts();
+        L.e(TAG, "showLiveList, ApiManager ,,, 执行结束。。。");
         ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<ResponseModule<List<LiveRoom>>>() {
             @Override public ResponseModule<List<LiveRoom>> onRequest() throws HyphenateException {
                 if(!isLoadMore){
@@ -188,5 +195,12 @@ public class LiveListFragment extends Fragment {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        L.e(TAG, "onResume, ApiManager ,,, 开始。。。 ");
+        ApiManager.getInstance().getAllGifts();
     }
 }
