@@ -16,7 +16,7 @@ import butterknife.OnClick;
 import cn.kkk.live.LiveConstants;
 import cn.kkk.live.ThreadPoolManager;
 import cn.kkk.live.data.restapi.LiveException;
-import cn.kkk.live.data.restapi.LiveManager;
+import cn.kkk.live.data.restapi.ApiManager;
 import cn.kkk.live.data.restapi.model.LiveStatusModule;
 import cn.kkk.live.data.restapi.model.StatisticsType;
 
@@ -68,7 +68,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
 
         executeTask(new ThreadPoolManager.Task<LiveStatusModule.LiveStatus>() {
             @Override public LiveStatusModule.LiveStatus onRequest() throws HyphenateException {
-                return LiveManager.getInstance().getLiveRoomStatus(liveId);
+                return ApiManager.getInstance().getLiveRoomStatus(liveId);
             }
 
             @Override public void onSuccess(LiveStatusModule.LiveStatus status) {
@@ -261,7 +261,7 @@ public class LiveAudienceActivity extends LiveBaseActivity implements UPlayerSta
                         if(count > 0) {
                             sendPraiseMessage(count);
                             try {
-                                LiveManager.getInstance().postStatistics(StatisticsType.PRAISE, liveId, count);
+                                ApiManager.getInstance().postStatistics(StatisticsType.PRAISE, liveId, count);
                             } catch (LiveException e) {
                                 e.printStackTrace();
                             }

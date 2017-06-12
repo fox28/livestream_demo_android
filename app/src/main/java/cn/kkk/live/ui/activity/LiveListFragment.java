@@ -17,7 +17,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.kkk.live.ThreadPoolManager;
-import cn.kkk.live.data.restapi.LiveManager;
+import cn.kkk.live.data.restapi.ApiManager;
 
 import com.bumptech.glide.Glide;
 import cn.kkk.live.R;
@@ -93,7 +93,7 @@ public class LiveListFragment extends Fragment {
                 if(!isLoadMore){
                     cursor = null;
                 }
-                return LiveManager.getInstance().getLivingRoomList(pageSize, cursor);// 发送具体的网络请求
+                return ApiManager.getInstance().getLivingRoomList(pageSize, cursor);// 发送具体的网络请求
             }
 
             @Override public void onSuccess(ResponseModule<List<LiveRoom>> listResponseModule) {

@@ -12,7 +12,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.kkk.live.ThreadPoolManager;
-import cn.kkk.live.data.restapi.LiveManager;
+import cn.kkk.live.data.restapi.ApiManager;
 
 import cn.kkk.live.R;
 
@@ -68,7 +68,7 @@ public class SearchActivity extends BaseActivity {
     private void searchLiveRoom(final String searchText){
         executeTask(new ThreadPoolManager.Task<LiveRoom>() {
             @Override public LiveRoom onRequest() throws HyphenateException {
-                return LiveManager.getInstance().getLiveRoomDetails(searchText);
+                return ApiManager.getInstance().getLiveRoomDetails(searchText);
             }
 
             @Override public void onSuccess(LiveRoom liveRoom) {

@@ -15,7 +15,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.kkk.live.data.restapi.LiveManager;
+import cn.kkk.live.data.restapi.ApiManager;
 
 import cn.kkk.live.R;
 
@@ -283,7 +283,7 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         executeRunnable(new Runnable() {
             @Override public void run() {
                 try {
-                    LiveManager.getInstance().terminateLiveRoom(liveId);
+                    ApiManager.getInstance().terminateLiveRoom(liveId);
                 } catch (LiveException e) {
                     e.printStackTrace();
                 }

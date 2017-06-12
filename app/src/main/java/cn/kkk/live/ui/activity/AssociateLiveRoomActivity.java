@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.kkk.live.ThreadPoolManager;
-import cn.kkk.live.data.restapi.LiveManager;
+import cn.kkk.live.data.restapi.ApiManager;
 
 import com.bumptech.glide.Glide;
 import cn.kkk.live.R;
@@ -68,7 +68,7 @@ public class AssociateLiveRoomActivity extends BaseActivity {
 
         executeTask(new ThreadPoolManager.Task<List<String>>() {
             @Override public List<String> onRequest() throws HyphenateException {
-                return LiveManager.getInstance().getAssociatedRooms(EMClient.getInstance().getCurrentUser());
+                return ApiManager.getInstance().getAssociatedRooms(EMClient.getInstance().getCurrentUser());
             }
 
             @Override public void onSuccess(List<String> list) {
@@ -105,7 +105,7 @@ public class AssociateLiveRoomActivity extends BaseActivity {
             showProgressDialog("获取直播间信息...");
             executeTask(new ThreadPoolManager.Task<LiveRoom>() {
                 @Override public LiveRoom onRequest() throws HyphenateException {
-                    return LiveManager.getInstance().getLiveRoomDetails(selectedLiveId);
+                    return ApiManager.getInstance().getLiveRoomDetails(selectedLiveId);
                 }
 
                 @Override public void onSuccess(LiveRoom liveRoom) {
@@ -192,10 +192,10 @@ public class AssociateLiveRoomActivity extends BaseActivity {
                     throw exception;
                 }
 
-                LiveRoom room =  LiveManager.getInstance().createLiveRoom(name, desc, coverUrl, selectedLiveId);
+                LiveRoom room =  ApiManager.getInstance().createLiveRoom(name, desc, coverUrl, selectedLiveId);
                 //现在服务器没有更新封面，手动调用更新
                 try {
-                    LiveManager.getInstance().updateLiveRoomCover(selectedLiveId, coverUrl);
+                    ApiManager.getInstance().updateLiveRoomCover(selectedLiveId, coverUrl);
                 } catch (LiveException e) {
                 }
                 return room;

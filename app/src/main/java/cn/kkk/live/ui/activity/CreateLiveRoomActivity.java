@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.kkk.live.ThreadPoolManager;
 import cn.kkk.live.data.model.LiveRoom;
-import cn.kkk.live.data.restapi.LiveManager;
+import cn.kkk.live.data.restapi.ApiManager;
 
 import cn.kkk.live.R;
 import com.hyphenate.chat.EMClient;
@@ -116,7 +116,7 @@ public class CreateLiveRoomActivity extends BaseActivity {
                 if(exception != null){
                     throw exception;
                 }
-                return LiveManager.getInstance().createLiveRoom(name, desc, coverUrl);
+                return ApiManager.getInstance().createLiveRoom(name, desc, coverUrl);
             }
 
             @Override public void onSuccess(LiveRoom liveRoom) {

@@ -27,13 +27,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by wei on 2017/2/14.
  */
 
-public class LiveManager {
+public class ApiManager {
     private String appkey;
     private ApiService apiService;
 
-    private static LiveManager instance;
+    private static ApiManager instance;
 
-    private LiveManager(){
+    private ApiManager(){
         try {
             ApplicationInfo appInfo = LiveApplication.getInstance().getPackageManager().getApplicationInfo(
                     LiveApplication.getInstance().getPackageName(), PackageManager.GET_META_DATA);
@@ -76,9 +76,9 @@ public class LiveManager {
         }
     }
 
-    public static LiveManager getInstance(){
+    public static ApiManager getInstance(){
         if(instance == null){
-            instance = new LiveManager();
+            instance = new ApiManager();
         }
         return instance;
     }
