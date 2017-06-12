@@ -42,7 +42,7 @@ public class LoginActivity extends BaseActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    if(EMClient.getInstance().isLoggedInBefore()){
+    if(LiveHelper.getInstance().isLoggedIn()){
       startActivity(new Intent(this, MainActivity.class));
       finish();
       return;
