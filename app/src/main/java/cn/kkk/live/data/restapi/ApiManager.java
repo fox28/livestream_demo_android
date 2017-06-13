@@ -135,24 +135,33 @@ public class ApiManager {
         liveRoom.setAnchorId(EMClient.getInstance().getCurrentUser());
         liveRoom.setCover(coverUrl);
 
-        Call<ResponseModule<LiveRoom>> responseCall;
-        if(liveRoomId != null){
-            responseCall = apiService.createLiveShow(liveRoomId, liveRoom);
+        String id = createChatRoom(name, description);
+        L.e(TAG, "createLiveRoomWithRequest, id = "+id);
+        if (id != null) {
+            liveRoom.setId(id);
+            liveRoom.setChatroomId(id);
+        } else {
+            liveRoom.setId(id);
+        }
 
-        }else {
-            responseCall = apiService.createLiveRoom(liveRoom);
-        }
-        ResponseModule<LiveRoom> response = handleResponseCall(responseCall).body();
-        LiveRoom room = response.data;
-        if(room.getId() != null) {
-            liveRoom.setId(room.getId());
-        }else {
-            liveRoom.setId(liveRoomId);
-        }
-        liveRoom.setChatroomId(room.getChatroomId());
+//        Call<ResponseModule<LiveRoom>> responseCall;
+//        if(liveRoomId != null){
+//            responseCall = apiService.createLiveShow(liveRoomId, liveRoom);
+//
+//        }else {
+//            responseCall = apiService.createLiveRoom(liveRoom);
+//        }
+//        ResponseModule<LiveRoom> response = handleResponseCall(responseCall).body();
+//        LiveRoom room = response.data;
+//        if(room.getId() != null) {
+//            liveRoom.setId(room.getId());
+//        }else {
+//            liveRoom.setId(liveRoomId);
+//        }
+//        liveRoom.setChatroomId(room.getChatroomId());
         //liveRoom.setAudienceNum(1);
-        liveRoom.setLivePullUrl(room.getLivePullUrl());
-        liveRoom.setLivePushUrl(room.getLivePushUrl());
+//        liveRoom.setLivePullUrl(room.getLivePullUrl());
+//        liveRoom.setLivePushUrl(room.getLivePushUrl());
         return liveRoom;
     }
 
@@ -212,6 +221,41 @@ public class ApiManager {
         Result<User> result = handleResponseCallToResult(call, User.class);
         if (result != null && result.isRetMsg()) {
             return result.getRetData();
+        }
+        return null;
+    }
+
+    /**
+     * 本地服务器创建聊天室，获得id后在创建直播室
+     * @param name
+     * @param description
+     */
+    public String createChatRoom(String name, String description) {
+        return createChatRoom("1IFgE", name, description, EMClient.getInstance().getCurrentUser(),
+                300, EMClient.getInstance().getCurrentUser());
+    }
+
+    /**
+     * 本地服务器创建聊天室，获得id后在创建直播室
+     * @param auth
+     * @param name
+     * @param description
+     * @param owner
+     * @param maxusers
+     * @param members
+     * @return
+     */
+    public String createChatRoom(String auth, String name, String description, String owner,int maxusers, String members) {
+        Call<String> call = mLiveService.createChatRoom(auth, name, description, owner, maxusers, owner);
+        try {
+            Response<String> response = call.execute();
+            String s = response.body();
+            L.e(TAG, "createChatRoom, s = "+s);
+            if (s != null) {
+                return ResultUtils.getEMResultFromJson(s); // 返回id
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
