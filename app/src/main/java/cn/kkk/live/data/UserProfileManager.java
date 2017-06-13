@@ -9,6 +9,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.domain.User;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import cn.kkk.live.I;
 import cn.kkk.live.data.model.IUserModel;
 import cn.kkk.live.data.model.OnCompleteListener;
 import cn.kkk.live.data.model.UserModel;
+import cn.kkk.live.data.restapi.ApiManager;
 import cn.kkk.live.utils.L;
 import cn.kkk.live.utils.PreferenceManager;
 import cn.kkk.live.utils.Result;
@@ -160,33 +162,40 @@ public class UserProfileManager {
 	}
 
 	public void asyncGetCurrentAppUserInfo(){
-		userModel.loadUserInfo(appContext, EMClient.getInstance().getCurrentUser(),
-				new OnCompleteListener<String>() {
+		new Thread(new Runnable() {
 			@Override
-			public void onSuccess(String jsonStr) {
-//				L.e(TAG, "asyncGetCurrentAppUserInfo, jsonStr = "+jsonStr);
-				if (jsonStr != null) {
-					Result result = ResultUtils.getResultFromJson(jsonStr, User.class);
-					if (result != null &&result.isRetMsg()) {
-						User user = (User) result.getRetData();
-//						L.e(TAG, "asyncGetCurrentAppUserInfo, user = "+user);
-						if (user!=null) {
-							updateCurrentAppUserInfo(user);
-//							currentAppUser = user;
-//							// 将user.getAvatar()保存到内存 SharePreference中
-//							setCurrentAppUserNick(user.getMUserNick());
-//							setCurrentAppUserAvatar(user.getAvatar());
-//							WeChatHelper.getInstance().saveAppContact(user);
-						}
-
+			public void run() {
+				try {
+					User user = ApiManager.getInstance().loadUserInfo(EMClient.getInstance().getCurrentUser());
+					L.e(TAG, "asyncGetCurrentAppUserInfo, user = "+user);
+					if (user != null) {
+						updateCurrentAppUserInfo(user);
 					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
-
-			@Override
-			public void onError(String error) {
-			}
-		});
+		}).start();
+//		userModel.loadUserInfo(appContext, EMClient.getInstance().getCurrentUser(),
+//				new OnCompleteListener<String>() {
+//			@Override
+//			public void onSuccess(String jsonStr) {
+//				if (jsonStr != null) {
+//					Result result = ResultUtils.getResultFromJson(jsonStr, User.class);
+//					if (result != null &&result.isRetMsg()) {
+//						User user = (User) result.getRetData();
+//						if (user!=null) {
+//							updateCurrentAppUserInfo(user);
+//						}
+//
+//					}
+//				}
+//			}
+//
+//			@Override
+//			public void onError(String error) {
+//			}
+//		});
 	}
 
 

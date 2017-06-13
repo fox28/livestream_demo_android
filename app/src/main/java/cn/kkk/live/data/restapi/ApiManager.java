@@ -11,6 +11,8 @@ import cn.kkk.live.data.restapi.model.LiveStatusModule;
 import cn.kkk.live.data.restapi.model.ResponseModule;
 import cn.kkk.live.data.restapi.model.StatisticsType;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.domain.User;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -219,6 +221,21 @@ public class ApiManager {
 
             }
         });
+    }
+
+    public User loadUserInfo(String username) throws IOException {
+        User user = null;
+        Call<String> call = mLiveService.loadUserInfo(username);
+        Response<String> response = call.execute();
+        L.e(TAG, "loadUserInfo, response = "+response);
+        String s = response.body();
+        if (s != null) {
+            Result result = ResultUtils.getResultFromJson(s, User.class);
+            if (result != null && result.isRetMsg()) {
+                user  = (User) result.getRetData();
+            }
+        }
+        return user;
     }
 
     /**
