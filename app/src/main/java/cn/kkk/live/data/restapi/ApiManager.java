@@ -196,46 +196,24 @@ public class ApiManager {
     //    handleResponseCall(respCall);
     //}
 
-    public void getAllGifts(){
+    public List<Gift> getAllGifts() throws LiveException {
         Call<String> call = mLiveService.getAllGifts();
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                String s = response.body();
-                L.e(TAG, "getAllGifts, onResponse, s = "+s);
-                if (s!=null) {
-                    Result result = ResultUtils.getListResultFromJson(s, Gift.class);
-                    L.e(TAG, "getAllGifts, result = "+result);
-                    if (result != null && result.isRetMsg()) {
-                        List<Gift> gifts = (List<Gift>) result.getRetData();
-                        L.e(TAG, "getAllGifts, size() = "+gifts.size() );
-                        for (Gift gift:gifts) {
-                            L.e(TAG, "getAllGifts, onResponse, gift = "+gift);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-
-            }
-        });
+        Result<List<Gift>> result = handleResponseCallToResultList(call, Gift.class);
+        if (result != null&&result.isRetMsg()) {
+            return result.getRetData();
+        }
+        return null;
     }
 
-    public User loadUserInfo(String username) throws IOException {
-        User user = null;
+
+
+    public User loadUserInfo(String username) throws IOException, LiveException {
         Call<String> call = mLiveService.loadUserInfo(username);
-        Response<String> response = call.execute();
-        L.e(TAG, "loadUserInfo, response = "+response);
-        String s = response.body();
-        if (s != null) {
-            Result result = ResultUtils.getResultFromJson(s, User.class);
-            if (result != null && result.isRetMsg()) {
-                user  = (User) result.getRetData();
-            }
+        Result<User> result = handleResponseCallToResult(call, User.class);
+        if (result != null && result.isRetMsg()) {
+            return result.getRetData();
         }
-        return user;
+        return null;
     }
 
     /**
@@ -359,6 +337,30 @@ public class ApiManager {
                 throw new LiveException(response.code(), response.errorBody().string());
             }
             return response;
+        } catch (IOException e) {
+            throw new LiveException(e.getMessage());
+        }
+    }
+    private <T> Result<T> handleResponseCallToResult(Call<String> responseCall, Class<T> clazz) throws LiveException{
+        try {
+            Response<String> response = responseCall.execute();
+            if(!response.isSuccessful()){
+                throw new LiveException(response.code(), response.errorBody().string());
+            }
+            String s = response.body();
+            return ResultUtils.getResultFromJson(s, clazz);
+        } catch (IOException e) {
+            throw new LiveException(e.getMessage());
+        }
+    }
+    private <T> Result<List<T>> handleResponseCallToResultList(Call<String> responseCall, Class<T> clazz) throws LiveException{
+        try {
+            Response<String> response = responseCall.execute();
+            if(!response.isSuccessful()){
+                throw new LiveException(response.code(), response.errorBody().string());
+            }
+            String s = response.body();
+            return ResultUtils.getListResultFromJson(s, clazz);
         } catch (IOException e) {
             throw new LiveException(e.getMessage());
         }

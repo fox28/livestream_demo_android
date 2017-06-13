@@ -17,12 +17,14 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.kkk.live.ThreadPoolManager;
+import cn.kkk.live.data.model.Gift;
 import cn.kkk.live.data.restapi.ApiManager;
 
 import com.bumptech.glide.Glide;
 import cn.kkk.live.R;
 
 import cn.kkk.live.data.model.LiveRoom;
+import cn.kkk.live.data.restapi.LiveException;
 import cn.kkk.live.data.restapi.model.ResponseModule;
 import cn.kkk.live.ui.GridMarginDecoration;
 import cn.kkk.live.utils.L;
@@ -93,6 +95,7 @@ public class LiveListFragment extends Fragment {
         else
             loadmorePB.setVisibility(View.VISIBLE);
         isLoading = true;
+        loadGiftList();
         ThreadPoolManager.getInstance().executeTask(new ThreadPoolManager.Task<ResponseModule<List<LiveRoom>>>() {
             @Override public ResponseModule<List<LiveRoom>> onRequest() throws HyphenateException {
                 if(!isLoadMore){
@@ -129,6 +132,25 @@ public class LiveListFragment extends Fragment {
                 hideLoadingView(isLoadMore);
             }
         });
+    }
+
+    private void loadGiftList() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<Gift> gifts = ApiManager.getInstance().getAllGifts();
+                    if (gifts != null) {
+                        L.e(TAG, "loadGiftList, gifts.size() = "+gifts.size());
+                        for (Gift gift : gifts) {
+                            L.e(TAG, "gift = "+gift);
+                        }
+                    }
+                } catch (LiveException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void hideLoadingView(boolean isLoadMore){

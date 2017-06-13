@@ -18,6 +18,7 @@ import cn.kkk.live.data.model.IUserModel;
 import cn.kkk.live.data.model.OnCompleteListener;
 import cn.kkk.live.data.model.UserModel;
 import cn.kkk.live.data.restapi.ApiManager;
+import cn.kkk.live.data.restapi.LiveException;
 import cn.kkk.live.utils.L;
 import cn.kkk.live.utils.PreferenceManager;
 import cn.kkk.live.utils.Result;
@@ -166,7 +167,12 @@ public class UserProfileManager {
 			@Override
 			public void run() {
 				try {
-					User user = ApiManager.getInstance().loadUserInfo(EMClient.getInstance().getCurrentUser());
+					User user = null;
+					try {
+						user = ApiManager.getInstance().loadUserInfo(EMClient.getInstance().getCurrentUser());
+					} catch (LiveException e) {
+						e.printStackTrace();
+					}
 					L.e(TAG, "asyncGetCurrentAppUserInfo, user = "+user);
 					if (user != null) {
 						updateCurrentAppUserInfo(user);
