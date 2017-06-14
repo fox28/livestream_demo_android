@@ -303,6 +303,7 @@ public class LiveAnchorActivity extends LiveBaseActivity {
                     .removeChatRoomChangeListener(chatRoomChangeListener);
         }
         EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
+        ApiManager.getInstance().deleteChatRoomFromAppService(chatroomId);
 
         executeRunnable(new Runnable() {
             @Override

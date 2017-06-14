@@ -121,9 +121,26 @@ public class ResultUtils {
                     return data.getString("id");
                 }
             }
+            return null;
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
+    }
+    public static boolean getEMResultWithSuccessFromJson(String jsonStr){
+        try {
+            JSONObject jsonObject = new JSONObject(jsonStr);
+            if (!jsonObject.isNull("data")) {
+                JSONObject data = jsonObject.getJSONObject("data");
+                if (data.isNull("success")) {
+//                   return data.getJSONObject(0).getString("id");
+                    return data.getBoolean("success");
+                }
+            }
+            return false;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

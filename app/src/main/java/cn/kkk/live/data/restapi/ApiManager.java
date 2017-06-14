@@ -260,6 +260,24 @@ public class ApiManager {
         return null;
     }
 
+    public void deleteChatRoomFromAppService(String chatRoomId){
+        Call<String> call = mLiveService.deleteChatRoom("1IFgE", chatRoomId);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                String s = response.body();
+                if (s != null) {
+                    boolean deleteSuccess = ResultUtils.getEMResultWithSuccessFromJson(s);
+                    L.e(TAG, "deleteChatRoomFromAppService, isSuccess = "+deleteSuccess);
+                }
+            }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                    L.e(TAG, "deleteChatRoomFromAppService, onFailure = "+t.toString());
+            }
+        });
+    }
+
     /**
      * 获取直播室直播状态
      * @param roomId

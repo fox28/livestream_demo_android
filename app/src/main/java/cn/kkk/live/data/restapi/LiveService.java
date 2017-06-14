@@ -30,4 +30,10 @@ public interface LiveService {
             @Query("members") String members
 
     );
+    // GET http://101.251.196.90:8080/SuperWeChatServerV2.0/live/deleteChatRoom?auth=1IFgE&chatRoomId=123459835
+    @GET("live/deleteChatRoom")
+    Call<String> deleteChatRoom(
+            @Query("auth") String auth,
+            @Query("chatRoomId") String chatRoomId
+    );
 }
