@@ -80,6 +80,7 @@ public class UserProfileManager {
 			currentAppUser = new User(username);
 			String nick = getCurrentUserNick();
 			currentAppUser.setMUserNick((nick != null) ? nick : username);
+			currentAppUser.setAvatar(getCurrentUserAvatar());// 从SharePreference中获得头像
 		}
 		return currentAppUser;
 	}
