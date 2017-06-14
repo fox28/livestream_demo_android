@@ -109,8 +109,8 @@ public abstract class LiveBaseActivity extends BaseActivity {
     }
 
     private void initAnchorInfo() {
-        EaseUserUtils.setAppUserNick(EMClient.getInstance().getCurrentUser(), usernameView);
-        EaseUserUtils.setAppUserAvatar(LiveBaseActivity.this, EMClient.getInstance().getCurrentUser(),ivAvatar);
+        EaseUserUtils.setCurrentNick(usernameView);
+        EaseUserUtils.setCurrentAvatar(LiveBaseActivity.this, ivAvatar);
     }
 
     protected Handler handler = new Handler();
