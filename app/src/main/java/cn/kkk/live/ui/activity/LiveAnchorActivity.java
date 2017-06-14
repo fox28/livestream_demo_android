@@ -170,10 +170,13 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         liveEndView.setVisibility(View.VISIBLE);
         Button liveContinueBtn = (Button) liveEndView.findViewById(R.id.live_close_confirm);
         TextView usernameView = (TextView) liveEndView.findViewById(R.id.tv_username);
+        ImageView imageViewAvatar = (ImageView) liveEndView.findViewById(R.id.img_finish_avatar);
         ImageView closeConfirmView =
                 (ImageView) liveEndView.findViewById(R.id.img_finish_confirmed);
         TextView watchedCountView = (TextView) liveEndView.findViewById(R.id.txt_watched_count);
-        usernameView.setText(EMClient.getInstance().getCurrentUser());
+//        usernameView.setText(EMClient.getInstance().getCurrentUser());
+        EaseUserUtils.setCurrentNick(usernameView);
+        EaseUserUtils.setCurrentAvatar(LiveAnchorActivity.this, imageViewAvatar);
         watchedCountView.setText(watchedCount + "人看过");
 
         liveContinueBtn.setOnClickListener(new View.OnClickListener() {
