@@ -295,21 +295,21 @@ public class LiveAnchorActivity extends LiveBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         //mEasyStreaming.onDestroy();
-        cameraView.release();
+        cameraView.release(); // 自定义View中方法，释放所有资源
 
-        if (chatRoomChangeListener != null) {
+        if (chatRoomChangeListener != null) { //移除监听器
             EMClient.getInstance()
                     .chatroomManager()
                     .removeChatRoomChangeListener(chatRoomChangeListener);
         }
-        EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);
+        EMClient.getInstance().chatroomManager().leaveChatRoom(chatroomId);// 关闭环信聊天室
         ApiManager.getInstance().deleteChatRoomFromAppService(chatroomId);
 
         executeRunnable(new Runnable() {
             @Override
             public void run() {
                 try {
-                    ApiManager.getInstance().terminateLiveRoom(liveId);
+                    ApiManager.getInstance().terminateLiveRoom(liveId); // 关闭直播间
                 } catch (LiveException e) {
                     e.printStackTrace();
                 }
