@@ -63,11 +63,6 @@ public class LiveAnchorActivity extends LiveBaseActivity {
     //UEasyStreaming.UEncodingType encodingType;
 
     boolean isStarted;
-    @BindView(R.id.iv_avatar)
-    EaseImageView mIvAvatar;
-    @BindView(R.id.tv_username)
-    TextView mTvUsername;
-
     private AVOption mAVOption;
 
     private Handler handler = new Handler() {
@@ -87,13 +82,7 @@ public class LiveAnchorActivity extends LiveBaseActivity {
         setContentView(R.layout.activity_live_anchor);
         ButterKnife.bind(this);
         initLiveEnv();
-        initView();
         startLive();
-    }
-
-    private void initView() {
-        EaseUserUtils.setAppUserNick(EMClient.getInstance().getCurrentUser(), mTvUsername);
-        EaseUserUtils.setAppUserAvatar(LiveAnchorActivity.this, EMClient.getInstance().getCurrentUser(),mIvAvatar);
     }
 
     public void initLiveEnv() {

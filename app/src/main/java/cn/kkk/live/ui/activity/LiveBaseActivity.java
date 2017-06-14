@@ -32,6 +32,8 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.widget.EaseImageView;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import java.util.ArrayList;
@@ -62,6 +64,8 @@ public abstract class LiveBaseActivity extends BaseActivity {
     @BindView(R.id.like_image) ImageView likeImageView;
     @BindView(R.id.txt_live_id) TextView liveIdView;
     @BindView(R.id.tv_username) TextView usernameView;
+    @BindView(R.id.iv_avatar)   EaseImageView ivAvatar;
+
 
     protected String anchorId;
 
@@ -97,10 +101,16 @@ public abstract class LiveBaseActivity extends BaseActivity {
         chatroomId = liveRoom.getChatroomId();
         anchorId = liveRoom.getAnchorId();
         onActivityCreate(savedInstanceState);
-        usernameView.setText(anchorId);
+//        usernameView.setText(anchorId);
+        initAnchorInfo();
         liveIdView.setText(liveId);
         audienceNumView.setText(String.valueOf(liveRoom.getAudienceNum()));
         watchedCount = liveRoom.getAudienceNum();
+    }
+
+    private void initAnchorInfo() {
+        EaseUserUtils.setAppUserNick(EMClient.getInstance().getCurrentUser(), usernameView);
+        EaseUserUtils.setAppUserAvatar(LiveBaseActivity.this, EMClient.getInstance().getCurrentUser(),ivAvatar);
     }
 
     protected Handler handler = new Handler();
