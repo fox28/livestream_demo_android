@@ -2,6 +2,11 @@ package cn.kkk.live;
 
 import android.content.Context;
 
+import java.util.List;
+import java.util.Map;
+
+import cn.kkk.live.data.model.Gift;
+import cn.kkk.live.db.GiftDao;
 import cn.kkk.live.utils.PreferenceManager;
 
 
@@ -37,8 +42,15 @@ public class LiveModel {
         return PreferenceManager.getInstance().getCurrentUsername();
     }
     
+    public Map<Integer, Gift> getGiftList(){
+        GiftDao dao = new GiftDao();
+        return dao.getAppGiftList();
+    }
 
-
+    public void saveGiftList(List<Gift> list) {
+        GiftDao dao = new GiftDao();
+        dao.saveAppGiftList(list);
+    }
 
     
 

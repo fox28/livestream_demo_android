@@ -17,17 +17,25 @@ import com.hyphenate.easeui.domain.User;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import cn.kkk.live.data.UserProfileManager;
+import cn.kkk.live.data.model.Gift;
 import cn.kkk.live.data.model.IUserModel;
+import cn.kkk.live.data.restapi.ApiManager;
+import cn.kkk.live.data.restapi.LiveException;
+import cn.kkk.live.db.DBManager;
 import cn.kkk.live.ui.activity.MainActivity;
+import cn.kkk.live.utils.L;
 import cn.kkk.live.utils.PreferenceManager;
 
 public class LiveHelper {
 
     protected static final String TAG = "LiveHelper";
-
+    private Map<Integer, Gift> giftMap;
     private EaseUI easeUI;
 
     /**
@@ -266,6 +274,56 @@ public class LiveHelper {
 
     synchronized void reset() {
         getUserProfileManager().reset();
+        DBManager.getInstance().closeDB(); // 关闭数据库
     }
 
+
+    public void syncLoadGiftList(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<Gift> list = ApiManager.getInstance().getAllGifts();
+                    if (list != null && list.size() > 0) {
+                        Map<Integer,Gift> map = new HashMap<Integer, Gift>();
+                        for (Gift gift : list) {
+                            map.put(gift.getId(), gift);
+                        }
+                        // 保存到内存
+                        saveGiftList(map);
+                        // 保存到数据库
+                        mLiveModel.saveGiftList(list);
+                    }
+                } catch (LiveException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+    public void saveGiftList(Map<Integer, Gift> list) {
+        L.e(TAG, "setGiftList to cache");
+        if (list == null) {
+            if (giftMap != null) {
+                giftMap.clear();
+            }
+            return;
+        }
+        giftMap = list;
+    }
+    /**
+     * 如giftList为空，从database 获取giftList； 如还为null，new一个
+     * @return giftList
+     */
+    public Map<Integer, Gift> getGiftList(){
+        if (giftMap == null) {
+            giftMap = DBManager.getInstance().getGiftList();
+        }
+        // return a empty non-null object to avoid app crash
+        if (giftMap==null) {
+            giftMap = new Hashtable<Integer, Gift>();
+        }
+        return giftMap;
+    }
 }

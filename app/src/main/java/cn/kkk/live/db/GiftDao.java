@@ -18,18 +18,21 @@ import java.util.List;
 import java.util.Map;
 
 import cn.kkk.live.data.model.Gift;
+import cn.kkk.live.utils.L;
 
 /**
  * Created by apple on 2017/6/14.
  */
 
 public class GiftDao {
+    private static final String TAG = "GiftDao";
+
     public static final String GIFT_TABLE_NAME = "t_live_gifts";
     public static final String GIFT_COLUMN_ID = "m_gift_id";
     public static final String GIFT_COLUMN_NAME= "m_gift_name";
     public static final String GIFT_COLUMN_URL = "m_gift_url";
     public static final String GIFT_COLUMN_PRICE= "m_gift_price";
-    public GiftDao(Context context) {
+    public GiftDao() {
     }
     /**
      * save gift list
@@ -37,6 +40,7 @@ public class GiftDao {
      * @param giftList
      */
     public void saveAppGiftList(List<Gift> giftList) {
+        L.e(TAG, "saveAppGiftList to databases");
         DBManager.getInstance().saveGiftList(giftList);
     }
 

@@ -18,14 +18,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import cn.kkk.live.LiveApplication;
+import cn.kkk.live.utils.L;
 
 /**
  * Created by apple on 2017/6/14.
  */
 
-public class DbOpenHelper extends SQLiteOpenHelper {
+public class DBOpenHelper extends SQLiteOpenHelper {
+    private static final String TAG = "DBOpenHelper";
+
     private static final int DATABASE_VERSION = 1;
-    private static DbOpenHelper instance;
+    private static DBOpenHelper instance;
     private static final String GIFT_TABLE_CREATE = "CREATE TABLE "
             + GiftDao.GIFT_TABLE_NAME + " ("
             + GiftDao.GIFT_COLUMN_NAME + " TEXT, "
@@ -33,13 +36,14 @@ public class DbOpenHelper extends SQLiteOpenHelper {
             + GiftDao.GIFT_COLUMN_PRICE  + " INTEGER, "
             + GiftDao.GIFT_COLUMN_ID + " INTEGER PRIMARY KEY);";
 
-    private DbOpenHelper(Context context) {
+    private DBOpenHelper(Context context) {
         super(context, getUserDatabaseName(), null, DATABASE_VERSION);
+        L.e(TAG, "DBOpenHelper, start ...");
     }
 
-    public static DbOpenHelper getInstance(Context context) {
+    public static DBOpenHelper getInstance(Context context) {
         if (instance == null) {
-            instance = new DbOpenHelper(context.getApplicationContext());
+            instance = new DBOpenHelper(context.getApplicationContext());
         }
         return instance;
     }
@@ -49,8 +53,9 @@ public class DbOpenHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(GIFT_TABLE_CREATE);
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        L.e(TAG, "SQLiteDatabase, onCreate,  ...");
+        sqLiteDatabase.execSQL(GIFT_TABLE_CREATE);
     }
 
     @Override

@@ -2,20 +2,14 @@ package cn.kkk.live.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
-import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.domain.User;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.util.HanziToPinyin;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
 import cn.kkk.live.LiveApplication;
 import cn.kkk.live.data.model.Gift;
+import cn.kkk.live.utils.L;
 
 /**
  * Created by apple on 2017/6/14.
@@ -24,10 +18,11 @@ import cn.kkk.live.data.model.Gift;
 public class DBManager {
     private static final String TAG = "SuperWeChatDBManager";
     static private DBManager dbMgr = new DBManager();
-    private DbOpenHelper dbHelper;
+    private DBOpenHelper dbHelper;
 
     private DBManager(){
-        dbHelper = DbOpenHelper.getInstance(LiveApplication.getInstance().getApplicationContext());
+        L.e(TAG, "DBManager init DBOpenHelper");
+        dbHelper = DBOpenHelper.getInstance(LiveApplication.getInstance().getApplicationContext());
     }
 
     public static synchronized DBManager getInstance(){
@@ -42,6 +37,7 @@ public class DBManager {
      * @param giftList
      */
     synchronized public void saveGiftList(List<Gift> giftList) {
+        L.e(TAG, "saveGiftsList to database");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if (db.isOpen()) {
             db.delete(GiftDao.GIFT_TABLE_NAME, null, null);
