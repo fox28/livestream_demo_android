@@ -232,7 +232,8 @@ public class ApiManager {
      */
     public String createChatRoom(String name, String description) {
         return createChatRoom("1IFgE", name, description, EMClient.getInstance().getCurrentUser(),
-                300, EMClient.getInstance().getCurrentUser());
+                300, EMClient.getInstance().getCurrentUser()+",bbb15901,bbb15903,bbb15905,bbb15906" +
+                        ",bbb15907,bb15907,bb15904,bb15902,bb15901");
     }
 
     /**

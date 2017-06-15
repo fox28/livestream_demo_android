@@ -20,6 +20,7 @@ import cn.kkk.live.data.TestAvatarRepository;
 import cn.kkk.live.data.model.LiveRoom;
 import cn.kkk.live.ui.widget.PeriscopeLayout;
 import cn.kkk.live.ui.widget.RoomMessagesView;
+import cn.kkk.live.utils.L;
 import cn.kkk.live.utils.Utils;
 
 import com.bumptech.glide.Glide;
@@ -391,6 +392,11 @@ public abstract class LiveBaseActivity extends BaseActivity {
                     chatroom = EMClient.getInstance()
                             .chatroomManager()
                             .fetchChatRoomFromServer(chatroomId, true);
+                    L.e(TAG, "showMemberList, chatroom, toString = "+chatroom.toString());
+                    L.e(TAG, "showMemberList, chatroom, getName = "+chatroom.getName());
+                    L.e(TAG, "showMemberList, chatroom, getId = "+chatroom.getId());
+                    L.e(TAG, "showMemberList, chatroom, getMemberList = "+chatroom.getMemberList());
+                    L.e(TAG, "showMemberList, chatroom, getMemberCount = "+chatroom.getMemberCount());
                     memberList.clear();
                     List<String> tempList = new ArrayList<>();
                     tempList.addAll(chatroom.getAdminList());
@@ -398,10 +404,12 @@ public abstract class LiveBaseActivity extends BaseActivity {
                     if (tempList.contains(chatroom.getOwner())) {
                         tempList.remove(chatroom.getOwner());
                     }
-                    if(tempList.size() > MAX_SIZE) {
-                        for (int i = 0; i < MAX_SIZE; i++){
+                    if (tempList.size() > MAX_SIZE) {
+                        for (int i = 0; i < MAX_SIZE; i++) {
                             memberList.add(i, tempList.get(i));
                         }
+                    } else {
+                        memberList.addAll(tempList);
                     }
                 } catch (HyphenateException e) {
                     e.printStackTrace();
@@ -527,10 +535,11 @@ public abstract class LiveBaseActivity extends BaseActivity {
                 }
             });
             //暂时使用测试数据
-            Glide.with(context)
+            /*Glide.with(context)
                     .load(avatarRepository.getAvatar())
                     .placeholder(R.drawable.ease_default_avatar)
-                    .into(holder.Avatar);
+                    .into(holder.Avatar);*/
+            EaseUserUtils.setAppUserAvatar(LiveBaseActivity.this, namelist.get(position), holder.Avatar);
         }
 
         @Override public int getItemCount() {
