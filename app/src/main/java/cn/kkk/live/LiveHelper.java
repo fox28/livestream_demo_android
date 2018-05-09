@@ -98,6 +98,7 @@ public class LiveHelper {
             setGlobalListeners();
             broadcastManager = LocalBroadcastManager.getInstance(appContext);
         }
+        syncLoadGiftList();
     }
 
 
